@@ -14,6 +14,8 @@ void motorSpeed()
 
   digitalWrite(MOTOR_L_2, direction_left);
   ledcWrite(PWMCHANNELMOTORLEFT, motor_left);
+
+  Serial.printf("motor_right=%d, motor_left=%d\n", motor_right, motor_left);
 }
 
 void motorStop()
@@ -35,8 +37,8 @@ void notify()
   direction_left = yAxisValue >= 0;
   direction_right = xAxisValue >= 0;
 
-  motor_left = map(yAxisValue, 127, -128, 0, -254);
-  motor_right = map(xAxisValue, 127, -128, 0, -254);
+  motor_left = map(yAxisValue, POSITIVELIMIT_X_Y, NEGATIVELIMIT_X_Y, POSITIVELIMIT_R_L, NEGATIVELIMIT_R_L);
+  motor_right = map(xAxisValue, POSITIVELIMIT_X_Y, NEGATIVELIMIT_X_Y, POSITIVELIMIT_R_L, NEGATIVELIMIT_R_L);
 
   motorSpeed();
 
