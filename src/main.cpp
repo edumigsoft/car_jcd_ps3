@@ -42,7 +42,6 @@ void notify()
 
   if (Ps3.event.button_down.cross)
   {
-    // startBuzzer = !startBuzzer;
   }
 }
 
@@ -51,13 +50,6 @@ void onConnect()
   motorStop();
 
   Serial.println("Connected!.");
-}
-
-void onDisConnect()
-{
-  motorStop();
-
-  Serial.println("DisConnected!.");
 }
 
 void setup()
@@ -77,20 +69,23 @@ void setup()
   ledcAttachPin(MOTOR_R_1, PWMCHANNELMOTORRIGHT);
   ledcSetup(PWMCHANNELMOTORRIGHT, FREQ, RESOLUTION);
 
-  // motorStop();
+  motorStop();
 
-  Ps3.attach(notify);
   Ps3.attachOnConnect(onConnect);
-  Ps3.attachOnDisconnect(onDisConnect);
   Ps3.begin(MAC_PS3);
-
-  while (!Ps3.isConnected())
-  {
-    Serial.println("Waiting for connection to control");
-    delay(300);
-  }
 }
 
 void loop()
 {
+  if (!Ps3.isConnected())
+  {
+    motorStop();
+
+    Serial.println("Waiting for connection to control");
+    delay(300);
+
+    return;
+  }
+
+  notify();
 }
