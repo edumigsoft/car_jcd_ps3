@@ -165,7 +165,7 @@ void setupDisplay()
   strip.begin();
   strip.clear();
   strip.show();
-  strip.setBrightness(20);
+  strip.setBrightness(10);
 }
 
 // Motor
@@ -259,22 +259,17 @@ void setup()
   setupDisplay();
 
   Ps3.attachOnConnect(onConnect);
+  Ps3.attach(notify);
   Ps3.begin(MAC_PS3);
+
+  while (!Ps3.isConnected())
+  {
+    Serial.println("Waiting for connection to control");
+    delay(300);
+  }
 }
 
 void loop()
 {
-  if (!Ps3.isConnected())
-  {
-    motorStop();
-
-    Serial.println("Waiting for connection to control");
-    delay(300);
-
-    return;
-  }
-
-  notify();
-
   display();
 }
